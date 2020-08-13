@@ -1,0 +1,113 @@
+// linked_list.cpp
+
+/*
+cons: a, b: (a, b)
+
+*/
+
+template <typename T>
+struct Node {
+	void* data;
+	struct Node *next;
+};
+
+int main() {
+
+}
+
+T cons(struct Node a, struct Node b) {
+
+}
+
+// this is tricky
+
+/*
+python:
+
+cons = lambda a, b: [a, b]
+car = lambda a: a[0]
+cdr = lambda b: b[0]
+
+#################
+
+	/*
+		WrappedType operator<<(const WrappedType& aWrappedType) const {
+			return "OVERLOADED";
+		}
+		*/
+
+		/*
+		friend std::ostream &operator<<(std::ostream &outStream, const WrappedType &WT ) {
+			outStream << this -> internalVar;
+			return outStream;
+		}
+		*/
+		
+
+		/*
+		// hm, how to do this?
+		// remove this later
+		template <typename T>
+		T getAsString() {
+			switch (storedType) {
+				case S:
+					return cast(std::string);
+				case B:
+					return cast(bool);
+				case I:
+					return cast(int);
+				case F:
+					return cast(float);
+			}
+
+		}
+		*/
+
+#######################
+
+	/*
+	std::string a = boost::any_cast<std::string>(WT.internalVar);
+	stream << a;
+	return stream;
+	*/
+
+	/*
+	switch (WT.storedType) {
+		case S: CAST(std::string, s)
+		case B: CAST(bool, b)
+		case I: CAST(int, i)
+		case F: CAST(float, f)
+		default: std::cerr << "Bad datatype for overloaded stream operator" << std::endl;
+	}
+	*/
+
+			// std::string var = boost::any_cast<std::string>(WT.internalVar); stream << var; return var;
+
+			// std::string v = cast(std::string);
+			// stream << v;
+			// return stream;
+
+
+
+
+}
+	/*
+	switch (WT.storedType) {
+		case S:
+		std::string s = boost::any_cast<std::string>(WT.internalVar);
+		stream << s;
+			// return cast(std::string);
+	*/
+
+		/*
+		case B:
+			return 0;
+		case I:
+			return 0;
+		case F:
+			return 0;
+		
+	}
+	*/
+
+##########################
