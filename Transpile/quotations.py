@@ -6,7 +6,7 @@ def handle_quote(scheme_expr):
 			scheme_expr[index] = "identity"
 
 			if isinstance((to_quote := scheme_expr[index + 1]), list):
-				print("List:", to_quote)
+				# print("List:", to_quote)
 
 				# scheme_expr[index + 1] = str(to_quote).replace("[", "{").replace("]", "}")
 				bracket_list = str(to_quote).replace("[", "{").replace("]", "}")

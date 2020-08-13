@@ -5,7 +5,7 @@
 def make_arg_clause(arg_clause, cond_type, evaluator):
 	return f"{cond_type} ({evaluator(arg_clause[0])})\n" + "{return " + evaluator(arg_clause[1]) + "\n}"
 
-# test for 1-cond statement
+# test for 1-cond statement, and everything else in general
 def handle_cond(scheme_code, evaluator):
 	for index, argument in enumerate(scheme_code):
 		if argument == "cond":

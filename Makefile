@@ -1,15 +1,23 @@
+py=python3 scheme-\>cpp.py
+move_generated=mv Testing/*.cpp Output
+t=Testing/
+
 all:
-	python3 scheme-\>cpp.py Testing/test_file.scm 
-	python3 scheme-\>cpp.py Testing/strings.scm
-	python3 scheme-\>cpp.py Testing/lists_as_arguments.scm
-	python3 scheme-\>cpp.py Testing/functions.scm
-	python3 scheme-\>cpp.py Testing/dad_example.scm
-	python3 scheme-\>cpp.py Testing/simple_addition.scm
-	mv Testing/*.cpp Output
+	$(py) $ttest_file.scm 
+	$(py) $tstrings.scm
+	$(py) $tlists_as_arguments.scm
+	$(py) $tfunctions.scm
+	$(py) $tdad_example.scm
+	$(py) $tsimple_addition.scm
+	$(move_generated)
 
 math:
-	python3 scheme-\>cpp.py Testing/math.scm
-	mv Testing/*.cpp Output
+	$(py) $tmath.scm
+	$(move_generated)
+
+cond:
+	$(py) $tconditional.scm
+	$(move_generated)
 
 clean:
 	rm Testing/*.cpp

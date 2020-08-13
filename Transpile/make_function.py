@@ -44,7 +44,7 @@ class CFunction:
 		self.body_evaluator = body_evaluator
 
 	@staticmethod
-	def make_c_function(code, expression_evaluator):
-		c_func = CFunction(code[1][0], code[1][1:], code[2], code)
+	def make_c_function(code, expression_evaluator, template_enabled):
+		c_func = CFunction(code[1][0], code[1][1:], code[2], code, template_enabled)
 		c_func._set_body_eval(expression_evaluator)
 		return c_func

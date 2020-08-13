@@ -41,6 +41,7 @@ def make_float_funcs(scheme_expr):
 			return True
 		elif isinstance(argument, list):
 			return make_float_funcs(argument)
+	return False
 
 def modify_operators(scheme_expr, make_float_operators):
 	for index, argument in enumerate(scheme_expr):

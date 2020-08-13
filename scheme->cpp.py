@@ -1,6 +1,6 @@
 import sys
 
-from Front_End.lex_and_parse import parse, remove_comments
+from Front_End.lex_and_parse import parse
 # parse should have the changing for the math functions
 # maybe I deleted it?
 # find it in Carbonite
@@ -34,6 +34,7 @@ handle the number of elements being passed into a math function, and other varia
 implement cond instead of if
 multiple-signature function problems, w/ math functions like add?
 maybe generate a template for big nested lists?
+template name is not being appended onto function name - done
 
 a new TODO:
 - lists
@@ -46,14 +47,14 @@ important files:
 - vadiadic input appendage - make it work
 - finish writing transform_cond
 - and think about nested_generic_list some more
-- math.scm: write a test, test it
+- math.scm: write a test, test it - done
 """
 
 class CodeStack:
 	def __init__(self):
 		self.main = ["int main() {"]
 		self.func_list = []
-		self.top_level = ["#include \"../Std_Lib/std_lib.hpp\"", "using namespace std;"]
+		self.top_level = ["#include \"../Std_Lib/std_lib.hpp\""]
 
 	def add(self, code_part, code):
 		part_to_add_to = {"main": self.main, "funcs": self.func_list,
@@ -74,13 +75,21 @@ class CodeStack:
 
 
 def read_from_file(file_name):
+	file_contents = open(file_name).readlines()
+
+	# remove comments
+	for index, row in enumerate(file_contents):
+		if (comment_spot := row.find(";")) != -1:
+			file_contents[index] = row[:comment_spot]
+
 	expression = ""
-	for row in [i.strip() for i in open(file_name).readlines() if i != "\n"]:
+	for index, row in enumerate([i for i in [f.strip() for f in file_contents] if i not in " \n"]):
 		expression += f" {row}"
-		if expression.count("(") == expression.count(")"):
+		if (l := expression.count("(")) == (r := expression.count(")")):
 			yield expression
 			expression = ""
-
+		elif l != r and index == len(file_contents) - 1:
+			raise SyntaxError("Mismatched parentheses!")
 
 def generate_cpp(code: CodeStack):
 	c_file_name = sys.argv[1].rstrip("scm") + "cpp"
@@ -91,7 +100,7 @@ def main():
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(modify_operators(code, make_float_funcs(code)))
 	if len(sys.argv) > 1:
-		for expression in remove_comments(read_from_file(sys.argv[1])):
+		for expression in read_from_file(sys.argv[1]):
 			parsed_scheme = parse(expression)
 			parsed_scheme = handle_quote(parsed_scheme)
 			parsed_scheme = handle_lambda(parsed_scheme, eval_expr)
@@ -109,7 +118,7 @@ def main():
 
 			if parsed_scheme[0] == "declare":
 				if isinstance(parsed_scheme[1], list):
-					function = CFunction.make_c_function(parsed_scheme, eval_expr)
+					function = CFunction.make_c_function(parsed_scheme, eval_expr, True)
 					code_stack.add("funcs", function.__str__())
 				else:
 					if isinstance(parsed_scheme[2], list):

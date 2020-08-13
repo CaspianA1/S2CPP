@@ -6,6 +6,7 @@ var_name_replacements = {
 	"&" : "_and_", "?": "_cond_"
 }
 
+"""
 def remove_comments(rows):
 	for row in rows:
 		if (comment_spot := row.find(";")) != -1:
@@ -14,7 +15,7 @@ def remove_comments(rows):
 			yield row[:comment_spot]
 		else:
 			yield row
-
+"""
 
 def tokenize(chars: str) -> list:
 	tokens = chars.replace('(', ' ( ').replace(')', ' ) ')  # .split()
@@ -56,7 +57,7 @@ def parse(program: str) -> list:
 
 def change_var_names(scheme_expr: list):
 	for index, token in enumerate(scheme_expr):
-		if isinstance(token, str):
+		if isinstance(token, str) and not token.startswith("\""):
 			for special_char, replacement in var_name_replacements.items():
 				scheme_expr[index] = scheme_expr[index].replace(special_char, replacement)
 
