@@ -1,7 +1,7 @@
 #include "../Std_Lib/std_lib.hpp"
 auto x = 5;
-template <typename T, typename f, typename B>
-T f(f x, B y) {
+template <typename T, typename f, typename r>
+T f(f x, r y) {
 return add(3, x, y, 1);
 };
 int main() {

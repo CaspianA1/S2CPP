@@ -1,6 +1,6 @@
 #include "../Std_Lib/std_lib.hpp"
-template <typename T, typename S, typename M, typename x>
-T f(S a, M b, x c) {
+template <typename T, typename Z, typename n, typename x>
+T f(Z a, n b, x c) {
 return mul_d(3, a, b, div_d(2, 3.0, c));
 };
 int main() {

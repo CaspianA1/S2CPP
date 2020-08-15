@@ -9,6 +9,7 @@ from Transpile.variadic_input_appendage import append_input_num
 from Transpile.make_function import CFunction
 from Transpile.quotations import handle_quote
 from Transpile.lambdas import handle_lambda
+from Transpile.conditional import handle_cond
 from Transpile.transform_expression import (make_c_expr, 
 										   make_float_funcs,
 										   modify_operators)
@@ -40,13 +41,13 @@ figure out why the result "nan" is appearing for math.scm, in the middle express
 a new TODO:
 - lists
 - car, cdr, and cons
-- cond-statements
-- variadic function num arguments appendage
+- cond-statements - progress with macros
+- variadic function num arguments appendage - done
 - import scheme files
 
 important files:
-- vadiadic input appendage - make it work
-- finish writing transform_cond
+- vadiadic input appendage - make it work - done
+- finish writing transform_cond - not needed anymore, macros are probably the way to go now
 - and think about nested_generic_list some more
 - math.scm: write a test, test it - done
 """
@@ -125,7 +126,7 @@ def main(file_name):
 
 			if parsed_scheme[0] == "declare":
 				if isinstance(parsed_scheme[1], list):
-					function = CFunction.make_c_function(parsed_scheme, eval_expr, True)
+					function = CFunction.make_c_function(handle_cond(parsed_scheme, True), eval_expr, True)
 					code_stack.add("funcs", function.__str__())
 				else:
 					if isinstance(parsed_scheme[2], list):
@@ -135,9 +136,11 @@ def main(file_name):
 					code_stack.add("top level", f"auto {parsed_scheme[1]} = {value}")
 
 			elif parsed_scheme[0] == "express":
+				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", f"auto {parsed_scheme[1]} = {eval_expr(parsed_scheme[2])}")
 
 			else:
+				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", str(eval_expr(parsed_scheme)))
 
 		generate_cpp(code_stack)

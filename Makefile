@@ -14,17 +14,19 @@ all:
 	$(py) $tsimple_addition.scm
 	$(move_generated)
 
+# 1. get this working fully
 math:
 	$(py) $tmath.scm
 	$(move_generated)
 	$(cpp_14) $omath.cpp && ./a.out
 
+# 2. get this working as well
 import: math
 	$(py) $timports.scm
 	$(move_generated)
 	$(cpp_14) $oimports.cpp && ./a.out
 
-
+# 3. test this
 cond:
 	$(py) $tconditional.scm
 	$(move_generated)
