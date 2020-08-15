@@ -1,7 +1,7 @@
 #include "../Std_Lib/std_lib.hpp"
 auto add1 = identity([](auto x, auto y) {return add(x, 1)};);
-template <typename T, typename h, typename V>
-T multiply(h x, V y) {
+template <typename T, typename U, typename C>
+T multiply(U x, C y) {
 return mul(2, x, y);
 };
 int main() {

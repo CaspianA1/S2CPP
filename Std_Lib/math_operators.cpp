@@ -2,6 +2,8 @@
 // #include <stdbool.h>
 #include "stdarg_macros.h"
 
+#include <iostream>
+
 int add(int nargs, ...) {INIT int r = 0; LOOP r += va_arg(args, int); DEINIT}
 double add_d(int nargs, ...) { INIT double r = 0; LOOP r += va_arg(args, double); DEINIT}
 int sub(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, int); else r -= va_arg(args, int);} DEINIT}
@@ -9,6 +11,34 @@ double sub_d(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, dou
 int mul(int nargs, ...) {INIT int r = 1; LOOP r *= va_arg(args, int); DEINIT}
 double mul_d(int nargs, ...) {INIT double r = 1; LOOP r *= va_arg(args, double); DEINIT}
 double div_d(int nargs, ...) {INIT double r; LOOP {if (i == 0) r = va_arg(args, double); else r /= va_arg(args, double);} DEINIT}
+
+/*
+template <class ... Args>
+int foo(Args ... args)
+{
+    return (0 + ... + args);
+}
+*/
+
+// make it a templated variadic function
+/*
+
+*/
+
+/*
+template <typename ... T>
+float div_d(&T args...) {
+	float result = args[0];
+
+	for (int i = 1; i < args.length(); i++) {
+		result /= args[i];
+	}
+	return result;
+
+	// std::cout << "Tricked ya!";
+	// return 0.2;	
+}
+*/
 
 template <typename T>
 bool eq(T stmt1, T stmt2) { // val

@@ -35,6 +35,7 @@ implement cond instead of if
 multiple-signature function problems, w/ math functions like add?
 maybe generate a template for big nested lists?
 template name is not being appended onto function name - done
+figure out why the result "nan" is appearing for math.scm, in the middle expression
 
 a new TODO:
 - lists
@@ -96,15 +97,19 @@ def generate_cpp(code: CodeStack):
 	with open(c_file_name, "w") as out_file:
 		out_file.write(code.__str__())
 
-def main():
+def main(file_name):
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(modify_operators(code, make_float_funcs(code)))
+	parsing = lambda expr: append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr))
 	if len(sys.argv) > 1:
-		for expression in read_from_file(sys.argv[1]):
+		for expression in read_from_file(file_name):
+			"""
 			parsed_scheme = parse(expression)
 			parsed_scheme = handle_quote(parsed_scheme)
 			parsed_scheme = handle_lambda(parsed_scheme, eval_expr)
-			parsed_scheme = append_input_num(parsed_scheme)  # the function names aren't changed for math functions
+			parsed_scheme = append_input_num(parsed_scheme)
+			"""
+			parsing(expression)
 
 			if ((import_type := parsed_scheme[0]).startswith("import")):
 				file_to_import = parsed_scheme[1]
@@ -140,4 +145,4 @@ def main():
 		sys.exit()
 
 if __name__ == "__main__":
-	main()
+	main(sys.argv[1])

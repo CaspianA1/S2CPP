@@ -1,11 +1,21 @@
 ; math.scm
 
-; integer addition
-(express x (+ 5 3 2 (* 2 3)))
+; works: true
+; (express my-favorite-num (+ 5 3))
+; (display my-favorite-num)
 
-    
-(express m (* 8 2 (/ 5 3)))
+; works: true
+; (express x (+ 5 3 2 (* 2 3))) ; -> 16
 
-(display x)
-(display m)
-(display "This worked!")
+; works: true
+; numbers are now converted to floats properly in the c++ file
+; (express m (* 8 2 (/ 5 3))) ; -> 80 / 3 -> it works!
+
+; works: false
+; this is simply not mathematically correct
+; (express j (/ 2)) ; -> 1
+; (display j) - this works now. Yay!
+
+; (display x)
+; (display m)
+; (display j)

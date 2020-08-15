@@ -6,4 +6,4 @@
 #include "io.cpp"
 #include "math_operators.cpp"
 // equivalence
-// linked_list
+// the list file

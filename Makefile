@@ -14,6 +14,7 @@ all:
 math:
 	$(py) $tmath.scm
 	$(move_generated)
+	g++ -std=c++14 Output/math.cpp && ./a.out
 
 cond:
 	$(py) $tconditional.scm
