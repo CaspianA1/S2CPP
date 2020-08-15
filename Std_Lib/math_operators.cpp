@@ -2,8 +2,6 @@
 // #include <stdbool.h>
 #include "stdarg_macros.h"
 
-#include <iostream>
-
 int add(int nargs, ...) {INIT int r = 0; LOOP r += va_arg(args, int); DEINIT}
 double add_d(int nargs, ...) { INIT double r = 0; LOOP r += va_arg(args, double); DEINIT}
 int sub(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, int); else r -= va_arg(args, int);} DEINIT}

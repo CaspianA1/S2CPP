@@ -43,11 +43,12 @@ def make_float_funcs(scheme_expr):
 			return make_float_funcs(argument)
 	return False
 
+# applies only to built-in math functions that need va_args
 def make_ints_to_doubles(scheme_expr):
-	print("Scheme expression:", scheme_expr)
 	for index, argument in enumerate(scheme_expr):
-		print("Argument:", argument)
-		if isinstance(argument, int):
+		if index == 1:
+			continue
+		elif isinstance(argument, int):
 			scheme_expr[index] = float(argument)  # still floating-point
 		elif isinstance(argument, list):
 			scheme_expr[index] = make_ints_to_doubles(argument)
@@ -60,9 +61,9 @@ def modify_operators(scheme_expr, make_float_operators):
 
 		elif index == 0 and (function := scheme_expr[0]) in common_ends.keys():
 			# modify the operators and make the arguments floats
-			make_ints_to_doubles(scheme_expr)
 			scheme_expr[0] = common_ends[function]
 			if make_float_operators or function == "/":
+				make_ints_to_doubles(scheme_expr)
 				scheme_expr[0] += "_d"
 
 	return scheme_expr

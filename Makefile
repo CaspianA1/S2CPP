@@ -1,7 +1,10 @@
 py=python3 scheme-\>cpp.py
-move_generated=mv Testing/*.cpp Output
 t=Testing/
+o=Output/
+move_generated=mv $t*.cpp Output
+cpp_14=g++ -std=c++14
 
+# this isn't as useful anymore
 all:
 	$(py) $ttest_file.scm 
 	$(py) $tstrings.scm
@@ -14,7 +17,13 @@ all:
 math:
 	$(py) $tmath.scm
 	$(move_generated)
-	g++ -std=c++14 Output/math.cpp && ./a.out
+	$(cpp_14) $omath.cpp && ./a.out
+
+import: math
+	$(py) $timports.scm
+	$(move_generated)
+	$(cpp_14) $oimports.cpp && ./a.out
+
 
 cond:
 	$(py) $tconditional.scm

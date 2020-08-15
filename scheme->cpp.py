@@ -109,14 +109,16 @@ def main(file_name):
 			parsed_scheme = handle_lambda(parsed_scheme, eval_expr)
 			parsed_scheme = append_input_num(parsed_scheme)
 			"""
-			parsing(expression)
+			parsed_scheme = parsing(expression)
 
 			if ((import_type := parsed_scheme[0]).startswith("import")):
 				file_to_import = parsed_scheme[1]
-				if import_type == "import-module":
+				if import_type == "import-cpp":
 					code_stack.add("top level", f"#include \"{file_to_import}\"")
 				elif import_type == "import-sys":
 					code_stack.add("top level", f"#include <{file_to_import}>")
+				elif import_type == "import-scm":  # hm, this is not working
+					main(file_to_import)  # I see why this shouldn't work, but it's hard to find a fix
 				continue
 
 				# account for "include-scm" as well

@@ -6,15 +6,19 @@
 
 ; works: true
 ; (express x (+ 5 3 2 (* 2 3))) ; -> 16
+; (display x)
 
 ; works: true
 ; numbers are now converted to floats properly in the c++ file
-; (express m (* 8 2 (/ 5 3))) ; -> 80 / 3 -> it works!
+(express m (* 8 2 (/ 5 3))) ; -> 80 / 3 -> it works!
+(display m)
 
-; works: false
-; this is simply not mathematically correct
+(declare (f a b c) (* a b (/ 3 c)))
+(display (f 1 2 3))
+
+; works: true
 ; (express j (/ 2)) ; -> 1
-; (display j) - this works now. Yay!
+; (display j); - this works now. Yay!
 
 ; (display x)
 ; (display m)
