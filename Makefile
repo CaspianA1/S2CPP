@@ -2,7 +2,7 @@ py=python3 scheme-\>cpp.py
 t=Testing/
 o=Output/
 move_generated=mv $t*.cpp Output
-cpp_14=g++ -std=c++14
+cpp_17=g++ -std=c++17
 
 # this isn't as useful anymore
 all:
@@ -18,18 +18,24 @@ all:
 math:
 	$(py) $tmath.scm
 	$(move_generated)
-	$(cpp_14) $omath.cpp && ./a.out
+	$(cpp_17) $omath.cpp && ./a.out
 
 # 2. get this working as well
 import: math
 	$(py) $timports.scm
 	$(move_generated)
-	$(cpp_14) $oimports.cpp && ./a.out
+	$(cpp_17) $oimports.cpp && ./a.out
 
-# 3. test this
+# 3. test this further - done
 cond:
 	$(py) $tconditional.scm
 	$(move_generated)
+
+# 4. test this file - done
+bool_ops:
+	$(py) $tbool_operators.scm
+	$(move_generated)
+	$(cpp_17) $obool_operators.cpp && ./a.out
 
 clean:
 	rm Testing/*.cpp

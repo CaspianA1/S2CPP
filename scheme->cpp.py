@@ -9,6 +9,7 @@ from Transpile.variadic_input_appendage import append_input_num
 from Transpile.make_function import CFunction
 from Transpile.quotations import handle_quote
 from Transpile.lambdas import handle_lambda
+from Transpile.form_wrapped_types import make_wrapped_types
 from Transpile.conditional import handle_cond
 from Transpile.transform_expression import (make_c_expr, 
 										   make_float_funcs,
@@ -18,25 +19,26 @@ from Transpile.transform_expression import (make_c_expr,
 TODO:
 handle strings correctly - the double quotes disappear from the token, this may be a part of the problem - done
 handle if-statements correctly - done
-maybe 'if' can be a macro, if it takes in non-literal code? maybe not
-or maybe the code has to be made to a string, and then run via an eval function, like this:
-if_(eq?(x, 5), "display(five)", "display(not five)");
+maybe 'if' can be a macro, if it takes in non-literal code? maybe not - done
+or maybe the code has to be made to a string, and then run via an eval function, like this: - done
+if_(eq?(x, 5), "display(five)", "display(not five)"); - done
 change the (if, and, or, not) function names to have an appended underscore - done
 add imports - done
-import scheme files as well
+import scheme files as well - still working on it
 change variable names with dashes to have underscores - done
 remove question marks and exclamation points from variable names - done
-add quote function - done, but it may not work perfectly yet - completely done
+add quote function - done, but it may not work perfectly yet - still working on it
 test quote - not used anymore - or maybe not - done
 make sure that variable definitions still work - done
 turn contents inside quote into a string maybe? also if it's a list? or maybe not or something with that - done
 make quote into a macro that returns its parameter name? - done
-handle the number of elements being passed into a math function, and other variadic functions
-implement cond instead of if
-multiple-signature function problems, w/ math functions like add?
-maybe generate a template for big nested lists?
+handle the number of elements being passed into a math function, and other variadic functions - done
+implement cond instead of if - still working on it
+multiple-signature function problems, w/ math functions like add? - done
+maybe generate a template for big nested lists? - still working on it
 template name is not being appended onto function name - done
-figure out why the result "nan" is appearing for math.scm, in the middle expression
+figure out why the result "nan" is appearing for math.scm, in the middle expression - done
+proper error reporting - still working on it
 
 a new TODO:
 - lists
@@ -50,6 +52,15 @@ important files:
 - finish writing transform_cond - not needed anymore, macros are probably the way to go now
 - and think about nested_generic_list some more
 - math.scm: write a test, test it - done
+
+another TODO:
+- implement cond
+- make pairs, symbols and lists, car, cdr, and cons
+- proper error reporting
+- formatter
+- eqv function
+- import scheme files
+- that template error with math.scm
 """
 
 class CodeStack:
@@ -101,7 +112,7 @@ def generate_cpp(code: CodeStack):
 def main(file_name):
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(modify_operators(code, make_float_funcs(code)))
-	parsing = lambda expr: append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr))
+	parsing = lambda expr: make_wrapped_types(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr)))
 	if len(sys.argv) > 1:
 		for expression in read_from_file(file_name):
 			"""
@@ -126,9 +137,12 @@ def main(file_name):
 
 			if parsed_scheme[0] == "declare":
 				if isinstance(parsed_scheme[1], list):
+					print("Function")
 					function = CFunction.make_c_function(handle_cond(parsed_scheme, True), eval_expr, True)
 					code_stack.add("funcs", function.__str__())
 				else:
+					print("Declaration")
+					parsed_scheme = handle_cond(parsed_scheme, False)
 					if isinstance(parsed_scheme[2], list):
 						value = eval_expr(parsed_scheme[2])
 					else:
@@ -136,12 +150,15 @@ def main(file_name):
 					code_stack.add("top level", f"auto {parsed_scheme[1]} = {value}")
 
 			elif parsed_scheme[0] == "express":
+				print("Expression")
 				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", f"auto {parsed_scheme[1]} = {eval_expr(parsed_scheme[2])}")
 
 			else:
+				print("Unassigned function call:", parsed_scheme)
 				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", str(eval_expr(parsed_scheme)))
+
 
 		generate_cpp(code_stack)
 

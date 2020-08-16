@@ -12,9 +12,8 @@ RetType if_(bool cond, RetType varA, RetType varB) {
 }
 */
 
-#define _COND_CHECK(cond, res1, res2) cond ? res1 : res2
-#define STD_IF _COND_CHECK
-#define FUNCTION_IF return _COND_CHECK
+#define STD_IF(cond, res1, res2) cond ? res1 : res2
+#define FUNCTION_IF return STD_IF
 
 bool and_(int nargs, ...) {
 	INIT

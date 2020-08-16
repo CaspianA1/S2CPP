@@ -19,7 +19,6 @@ def append_input_num(scheme_code):
 			continue_twice = True
 			continue
 
-	print("Output scheme code:", scheme_code)
 	return scheme_code
 
 if __name__ == "__main__":

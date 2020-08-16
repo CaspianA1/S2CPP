@@ -1,7 +1,7 @@
 from random import choice
 from string import ascii_letters
 
-ascii_letters = ascii_letters.replace("T", "")
+# ascii_letters = ascii_letters.replace("T", "")
 
 class CFunction:
 	def __init__(self, name, args, body, scheme_equivalent, template_enabled = False):
@@ -20,21 +20,23 @@ class CFunction:
 			return list(template_types)
 		else:
 			# expand this later on to more typenames
-			template_types.add(choice(ascii_letters))
+			while (c := choice(ascii_letters)) in self.args:
+				continue
+			template_types.add(c)
 			return self._generate_template_types(args, template_types)
 
 	def __str__(self):
 		outp = ""
 
 		if self.template_enabled:
-			outp += "template <typename T, "
+			# outp += "template <typename T, "
+			outp += "template <"
 			for index, arg_type in enumerate(self.arg_types):
 				outp += f"typename {arg_type}, "
 
-			outp = outp.rstrip(", ")
-			outp += ">\n"
+			outp = outp.rstrip(", ") + ">\n"
 
-		outp += f"T {self.name}("
+		outp += f"auto {self.name}("
 		for index in range(len(self.args)):
 			outp += f"{self.arg_types[index]} {self.args[index]}, "
 		outp = outp.rstrip(", ") + ") " + "{\n" + f"return {self.body_evaluator(self.body)};\n" + "}"

@@ -6,6 +6,13 @@ var_name_replacements = {
 	"&" : "_and_", "?": "_cond_"
 }
 
+operator_replacements = {
+	">": "gt",
+	"<": "lt",
+	">=": "gte",
+	"<=": "lte"
+}
+
 """
 def remove_comments(rows):
 	for row in rows:
@@ -61,10 +68,15 @@ def change_var_names(scheme_expr: list):
 			for special_char, replacement in var_name_replacements.items():
 				scheme_expr[index] = scheme_expr[index].replace(special_char, replacement)
 
-		if token in ("if", "and", "or", "not"):
+		if token in ("and", "or", "not"):
 			scheme_expr[index] += "_"
+
 		elif isinstance(token, list):
 			scheme_expr[index] = change_var_names(token)
+
+		elif (equiv_operator := operator_replacements.get(token)) is not None:
+			scheme_expr[index] = equiv_operator
+
 	return scheme_expr
 
 def read_from_tokens(tokens: list) -> dict:

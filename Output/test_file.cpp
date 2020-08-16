@@ -1,12 +1,12 @@
 #include "../Std_Lib/std_lib.hpp"
 auto x = 5;
-template <typename T, typename f, typename r>
-T f(f x, r y) {
+template <typename M, typename N>
+auto f(M x, N y) {
 return add(3, x, y, 1);
 };
 int main() {
 display(8);
-if_(eq_cond_(x, 5), display("five"), display("not five"));
+STD_IF(eq_cond_(x, 5), display("five"), display("not five"));
 add(3, 5, 5, mul(2, 3, 7));
 mul_d(4, 8.0, 5.0, 2.0, div_d(2, 7.0, 3.0));
 f(add_d(2, 5.5, 7.0));
