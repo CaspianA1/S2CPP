@@ -1,31 +1,22 @@
 ; math.scm
 
-; works: true
-; (express my-favorite-num (+ 5 3))
-; (display my-favorite-num)
+(declare top-level 245); pass
 
-; works: true
-; (express x (+ 5 3 2 (* 2 3))) ; -> 16
-; (display x)
-
-; works: true
-; numbers are now converted to floats properly in the c++ file
-
-
-; (express m (* 8 2 (/ 5 3))) ; -> 80 / 3 -> it works!
-; (display m)
+(express my-favorite-num (+ 5 3)); pass
+(express x (+ 5 3 2 (* 2 3))); pass
+(express m (* 8 2 (/ 5 3))); pass
 
 ; DOES NOT WORK
 ; (declare (f a b c) (* a b (/ 3 c)))
 ; (display (f 1 2 3))
 
-(declare x (/ 5 2))
+; auto y = div_d(3, 5.0, (double) x, (double)(mul_d(3, 2.0, 3.0, (double)(sub_d(2, 2.0, 1.0)))));
+(express y (/ 5 x (* 2 3 (- 2 1)))); fail
+(express j (/ 2)); works differently under my transpiler and Chez Scheme
+
+(display top-level)
+(display my-favorite-num)
 (display x)
-
-; works: true
-; (express j (/ 2)) ; -> 1
-; (display j); - this works now. Yay!
-
-; (display x)
-; (display m)
-; (display j)
+(display m)
+(display y)
+(display j)

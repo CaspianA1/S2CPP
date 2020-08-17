@@ -9,7 +9,7 @@ from Transpile.variadic_input_appendage import append_input_num
 from Transpile.make_function import CFunction
 from Transpile.quotations import handle_quote
 from Transpile.lambdas import handle_lambda
-from Transpile.form_wrapped_types import make_wrapped_types
+from Transpile.math_double_casting import math_double_cast as mdc
 from Transpile.conditional import handle_cond
 from Transpile.transform_expression import (make_c_expr, 
 										   make_float_funcs,
@@ -61,6 +61,7 @@ another TODO:
 - eqv function
 - import scheme files
 - that template error with math.scm
+- float and int problem with operators - done
 """
 
 class CodeStack:
@@ -111,8 +112,8 @@ def generate_cpp(code: CodeStack):
 
 def main(file_name):
 	code_stack = CodeStack()
-	eval_expr = lambda code: make_c_expr(modify_operators(code, make_float_funcs(code)))
-	parsing = lambda expr: make_wrapped_types(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr)))
+	eval_expr = lambda code: make_c_expr(mdc(modify_operators(code, make_float_funcs(code))))
+	parsing = lambda expr: append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr))
 	if len(sys.argv) > 1:
 		for expression in read_from_file(file_name):
 			"""
@@ -122,6 +123,8 @@ def main(file_name):
 			parsed_scheme = append_input_num(parsed_scheme)
 			"""
 			parsed_scheme = parsing(expression)
+
+			# print("Parsed scheme:", parsed_scheme)
 
 			if ((import_type := parsed_scheme[0]).startswith("import")):
 				file_to_import = parsed_scheme[1]
@@ -137,11 +140,11 @@ def main(file_name):
 
 			if parsed_scheme[0] == "declare":
 				if isinstance(parsed_scheme[1], list):
-					print("Function")
+					# print("Function")
 					function = CFunction.make_c_function(handle_cond(parsed_scheme, True), eval_expr, True)
 					code_stack.add("funcs", function.__str__())
 				else:
-					print("Declaration")
+					# print("Declaration")
 					parsed_scheme = handle_cond(parsed_scheme, False)
 					if isinstance(parsed_scheme[2], list):
 						value = eval_expr(parsed_scheme[2])
@@ -150,12 +153,12 @@ def main(file_name):
 					code_stack.add("top level", f"auto {parsed_scheme[1]} = {value}")
 
 			elif parsed_scheme[0] == "express":
-				print("Expression")
+				# print("Expression")
 				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", f"auto {parsed_scheme[1]} = {eval_expr(parsed_scheme[2])}")
 
 			else:
-				print("Unassigned function call:", parsed_scheme)
+				# print("Unassigned function call:", parsed_scheme)
 				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", str(eval_expr(parsed_scheme)))
 

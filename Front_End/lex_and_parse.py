@@ -66,7 +66,8 @@ def change_var_names(scheme_expr: list):
 	for index, token in enumerate(scheme_expr):
 		if isinstance(token, str) and not token.startswith("\""):
 			for special_char, replacement in var_name_replacements.items():
-				scheme_expr[index] = scheme_expr[index].replace(special_char, replacement)
+				if scheme_expr[index] != special_char:
+					scheme_expr[index] = scheme_expr[index].replace(special_char, replacement)
 
 		if token in ("and", "or", "not"):
 			scheme_expr[index] += "_"

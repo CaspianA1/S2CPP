@@ -13,11 +13,18 @@ def make_wrapped_types(code):
             for a in code[index + 1:]:
                 var_type = ""
                 if a in ("#t", "#f"): var_type = "B"
-                elif isinstance(a, str) and a.startswith("\"") and a.endswith("\""): var_type = "S"
-                elif isinstance(a, int): var_type = "I"
-                elif isinstance(a, float): var_type = "F"
-                elif isinstance(a, list): pass
-                else: continue  # var name
+                elif isinstance(a, str) and a.startswith("\"") and a.endswith("\""):
+                    var_type = "S"
+                elif isinstance(a, int):
+                    var_type = "I"
+                elif isinstance(a, float):
+                    var_type = "F"
+                elif isinstance(a, list):
+                    print("Nested:", a)
+                    # how to gather type info of result?
+                    # WrappedType::make(tostring(identity(nestedstuff)), 
+                else:
+                    continue  # var name
                 cpp_generic_args += f"WrappedType::make({var_type}, \"{a}\""
             
 
