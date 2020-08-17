@@ -10,6 +10,8 @@
 ; (declare (f a b c) (* a b (/ 3 c)))
 ; (display (f 1 2 3))
 
+; (define y (/ 5 x (* 2 3 (- 2 1))))
+; (define y (/ 5 x))
 (define y (/ 5 x (* 2 3 (- 2 1))))
 (define j (/ 2)) ; -> 1
 

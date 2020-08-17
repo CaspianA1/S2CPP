@@ -11,7 +11,14 @@
 ; (display (f 1 2 3))
 
 ; auto y = div_d(3, 5.0, (double) x, (double)(mul_d(3, 2.0, 3.0, (double)(sub_d(2, 2.0, 1.0)))));
-(express y (/ 5 x (* 2 3 (- 2 1)))); fail
+; (express y (/ 5 x (* 2 3 (- 2 1)))); fail
+
+; (express y (/ 5 x)); works
+; (express y (/ 5 x (* 2 2))); works
+(express y (/ 5 x (* 2 3 (- 2 1)))) ; works
+
+
+
 (express j (/ 2)); works differently under my transpiler and Chez Scheme
 
 (display top-level)
@@ -20,3 +27,10 @@
 (display m)
 (display y)
 (display j)
+
+
+; auto y = div_d(3, 5.0, (double) x, (double)(mul_d(3, 2.0, 3.0, (double)(sub_d(2, 2.0, 1.0)))));
+; (express y (/     5             x          (*        2    3                   (- 2 1)))); fail
+
+; works: auto y = div_d(3, 5.0, (double) x, (double)(mul_d(2, 2.0, 3.0)));
+; doesn't work:

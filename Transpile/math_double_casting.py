@@ -24,6 +24,6 @@ def math_double_cast(code, convert_to_doubles = False):
 			# variable name
 			# other arguments will already have been converted to floats
 			if isinstance(arg, str) and not (arg.startswith("\"") and arg.endswith("\"")):
-				code[index] = f"(double) {arg}"
+				code[index] = f"(double){arg}"
 
 	return code

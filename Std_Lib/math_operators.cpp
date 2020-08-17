@@ -11,7 +11,7 @@
 int add(int nargs, ...) {INIT int r = 0; LOOP r += va_arg(args, int); DEINIT}
 double add_d(int nargs, ...) { INIT double r = 0; LOOP r += va_arg(args, double); DEINIT}
 int sub(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, int); else r -= va_arg(args, int);} DEINIT}
-double sub_d(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, double); else r *= va_arg(args, double);} DEINIT}
+double sub_d(int nargs, ...) {INIT double r; LOOP {if (i == 0) r = va_arg(args, double); else r -= va_arg(args, double);} DEINIT}
 int mul(int nargs, ...) {INIT int r = 1; LOOP r *= va_arg(args, int); DEINIT}
 double mul_d(int nargs, ...) {INIT double r = 1; LOOP r *= va_arg(args, double); DEINIT}
 
@@ -41,6 +41,7 @@ bool eqv(T* stmt1, T* stmt2) { // mem
 }
 
 // not exactly an operator, but still related
+// may not be needed
 template <typename T>
 double toDouble(T var) {
 	return (double) var;
