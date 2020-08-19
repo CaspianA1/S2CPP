@@ -1,4 +1,4 @@
-import sys
+from os.path import abspath, sys
 
 from Front_End.lex_and_parse import parse
 # parse should have the changing for the math functions
@@ -10,6 +10,7 @@ from Transpile.make_function import CFunction
 from Transpile.quotations import handle_quote
 from Transpile.lambdas import handle_lambda
 from Transpile.math_double_casting import math_double_cast as mdc
+from Transpile.memory_equivalence import handle_mem_equivalence as hme
 from Transpile.conditional import handle_cond
 from Transpile.transform_expression import (make_c_expr, 
 										   make_float_funcs,
@@ -24,7 +25,7 @@ or maybe the code has to be made to a string, and then run via an eval function,
 if_(eq?(x, 5), "display(five)", "display(not five)"); - done
 change the (if, and, or, not) function names to have an appended underscore - done
 add imports - done
-import scheme files as well - still working on it
+import scheme files as well - still working on it - done
 change variable names with dashes to have underscores - done
 remove question marks and exclamation points from variable names - done
 add quote function - done, but it may not work perfectly yet - still working on it
@@ -45,7 +46,7 @@ a new TODO:
 - car, cdr, and cons
 - cond-statements - progress with macros
 - variadic function num arguments appendage - done
-- import scheme files
+- import scheme files - done
 
 important files:
 - vadiadic input appendage - make it work - done
@@ -58,8 +59,8 @@ another TODO:
 - make pairs, symbols and lists, car, cdr, and cons
 - proper error reporting
 - formatter
-- eqv function
-- import scheme files
+- eqv function - done
+- import scheme files - done
 - that template error with math.scm
 - float and int problem with operators - done
 """
@@ -105,17 +106,21 @@ def read_from_file(file_name):
 		elif l != r and index == len(file_contents) - 1:
 			raise SyntaxError("Mismatched parentheses!")
 
-def generate_cpp(code: CodeStack):
-	c_file_name = sys.argv[1].rstrip("scm") + "cpp"
-	with open(c_file_name, "w") as out_file:
+def generate_cpp(code: CodeStack, file_name):
+	# c_file_name = sys.argv[1].rstrip("scm") + "cpp"
+
+	print("Generating c++ with a filename of", file_name)
+
+	with open(file_name, "w") as out_file:
 		out_file.write(code.__str__())
 
 def main(file_name):
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(mdc(modify_operators(code, make_float_funcs(code))))
-	parsing = lambda expr: append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr))
+	parsing = lambda expr: hme(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr)))
 	if len(sys.argv) > 1:
 		for expression in read_from_file(file_name):
+			print("expression:", expression)
 			"""
 			parsed_scheme = parse(expression)
 			parsed_scheme = handle_quote(parsed_scheme)
@@ -126,17 +131,33 @@ def main(file_name):
 
 			# print("Parsed scheme:", parsed_scheme)
 
-			if ((import_type := parsed_scheme[0]).startswith("import")):
-				file_to_import = parsed_scheme[1]
-				if import_type == "import-cpp":
-					code_stack.add("top level", f"#include \"{file_to_import}\"")
-				elif import_type == "import-sys":
-					code_stack.add("top level", f"#include <{file_to_import}>")
-				elif import_type == "import-scm":  # hm, this is not working
-					main(file_to_import)  # I see why this shouldn't work, but it's hard to find a fix
-				continue
+			if (import_type := parsed_scheme[0]).startswith("import"):
+				rel_import_name = parsed_scheme[1].strip("\"")
 
-				# account for "include-scm" as well
+				if import_type in ("import_cpp", "import_scm"):
+					# absolute long name
+					to_import = abspath(file_name[:file_name.rfind("/")]) + "/" + rel_import_name
+					# to_import = abp(file_name) + rel_import_name
+
+					if import_type == "import_cpp":
+						print("Importing c++")
+						print("To import with c++:", to_import)
+						code_stack.add("top level", f"#include \"{to_import}\"")
+					else:  # import a scheme file here
+						print("Import a scheme file!")
+						print("To import:", to_import)
+						new_code_stack = main(to_import)
+						new_filename = to_import.rstrip("scm") + "cpp"
+						print("New filename:", new_filename)
+						generate_cpp(new_code_stack, new_filename)  # not generating a file
+						print("Generated cpp now, with the name of", new_filename)
+						code_stack.add("top level", f"#include \"{new_filename}\"")
+						# code_stack.add("top level", f"#include \"{new"")
+
+				elif import_type == "import_sys":
+					code_stack.add("top level", f"#include <{rel_import_name}>")
+				
+				continue
 
 			if parsed_scheme[0] == "declare":
 				if isinstance(parsed_scheme[1], list):
@@ -162,12 +183,14 @@ def main(file_name):
 				parsed_scheme = handle_cond(parsed_scheme, False)
 				code_stack.add("main", str(eval_expr(parsed_scheme)))
 
-
-		generate_cpp(code_stack)
+		return code_stack
+		# generate_cpp(code_stack)
 
 	else:
 		print("Please specify a filename.")
 		sys.exit()
 
 if __name__ == "__main__":
-	main(sys.argv[1])
+	filename = sys.argv[1]
+	code_stack = main(filename)
+	generate_cpp(code_stack, filename.strip("scm") + "cpp")

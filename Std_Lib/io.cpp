@@ -2,7 +2,11 @@
 
 template <typename T>
 void display(T var) {
-	std::cout << var << std::endl;
+	std::cout << var;
+}
+
+void newline() {
+	std::cout << std::endl;
 }
 
 std::string read() {

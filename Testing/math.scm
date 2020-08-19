@@ -30,7 +30,4 @@
 
 
 ; auto y = div_d(3, 5.0, (double) x, (double)(mul_d(3, 2.0, 3.0, (double)(sub_d(2, 2.0, 1.0)))));
-; (express y (/     5             x          (*        2    3                   (- 2 1)))); fail
-
-; works: auto y = div_d(3, 5.0, (double) x, (double)(mul_d(2, 2.0, 3.0)));
-; doesn't work:
+; (express y (/     5             x          (*        2    3                   (- 2 1)))); now, it works

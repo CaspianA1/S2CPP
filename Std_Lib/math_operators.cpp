@@ -14,35 +14,18 @@ int sub(int nargs, ...) {INIT int r; LOOP {if (i == 0) r = va_arg(args, int); el
 double sub_d(int nargs, ...) {INIT double r; LOOP {if (i == 0) r = va_arg(args, double); else r -= va_arg(args, double);} DEINIT}
 int mul(int nargs, ...) {INIT int r = 1; LOOP r *= va_arg(args, int); DEINIT}
 double mul_d(int nargs, ...) {INIT double r = 1; LOOP r *= va_arg(args, double); DEINIT}
+double div_d(int nargs, ...) {INIT double r; LOOP {if (i == 0) r = va_arg(args, double); else r /= va_arg(args, double);} DEINIT}
 
-#include <iostream>
-using namespace std;
-double div_d(int nargs, ...) { // use WrappedType
-	INIT double r;
-	LOOP {
-		if (i == 0) r = va_arg(args, double);
-		else r /= va_arg(args, double);
-		// cout << "Input: " << va_arg(args, double) << endl;
-	}
-	DEINIT
-}
-
-OPERATOR(eq_cond_, ==)
+// https://stackoverflow.com/questions/16299246/what-is-the-difference-between-eq-eqv-equal-and-in-scheme
+// equal (object structure) is not implemented for now
+OPERATOR(eqv_cond, ==)
 OPERATOR(gt, >)
 OPERATOR(gte, >=)
 OPERATOR(lt, <)
 OPERATOR(lte, <=)
 
-// make this work
-template <typename T>
-bool eqv(T* stmt1, T* stmt2) { // mem
-	// make this work
-	return stmt1 == stmt2;
-}
-
-// not exactly an operator, but still related
-// may not be needed
-template <typename T>
-double toDouble(T var) {
-	return (double) var;
+// add support for this
+template <typename A, typename B>
+bool eq_cond(A* a, B* b) {
+	return a == b;
 }

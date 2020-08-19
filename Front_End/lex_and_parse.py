@@ -1,9 +1,9 @@
 # parse.py
 
 var_name_replacements = {
-	"~": "_approx_", ":": "_colon_", "-": "_",
-	"!": "_impure_", "@": "_at_"  , "$": "_dollar_",
-	"&" : "_and_", "?": "_cond_"
+	"~": "_approx", ":": "_colon", "-": "_",
+	"!": "_impure", "@": "_at"  , "$": "_dollar",
+	"&" : "_and", "?": "_cond"
 }
 
 operator_replacements = {

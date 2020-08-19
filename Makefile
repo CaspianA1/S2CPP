@@ -14,16 +14,16 @@ all:
 	$(py) $tsimple_addition.scm
 	$(move_generated)
 
-# 1. get this working fully
+# 1. get this working fully - done
 math:
 	$(py) $tmath.scm
 	$(move_generated)
 	$(cpp_17) $omath.cpp && ./a.out
 
-# 2. get this working as well
-import: math
-	$(py) $timports.scm
-	$(move_generated)
+# 2. get this working as well - done
+import:
+	$(py) $tImports/imports.scm
+	mv $tImports/imports.cpp Output
 	$(cpp_17) $oimports.cpp && ./a.out
 
 # 3. test this further - done
@@ -36,6 +36,11 @@ bool_ops:
 	$(py) $tbool_operators.scm
 	$(move_generated)
 	$(cpp_17) $obool_operators.cpp && ./a.out
+
+mem_equiv:
+	$(py) $tequality_test.scm
+	$(move_generated)
+	$(cpp_17) $oequality_test.cpp && ./a.out
 
 clean:
 	rm Testing/*.cpp
