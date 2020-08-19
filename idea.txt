@@ -1,3 +1,7 @@
 make functions to (define f (x) (__body__)) - done
 this way, no lambda stuff gets in the way - done
 later on, I can try to add anonymous functions, but that is not needed right now
+
+A second idea:
+A definition macro, that looks like this:
+#define define(name, val) name = val

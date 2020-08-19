@@ -37,10 +37,16 @@ bool_ops:
 	$(move_generated)
 	$(cpp_17) $obool_operators.cpp && ./a.out
 
+# 5. working
 mem_equiv:
 	$(py) $tequality_test.scm
 	$(move_generated)
 	$(cpp_17) $oequality_test.cpp && ./a.out
+
+io:
+	$(py) $tio_test.scm
+	$(move_generated)
+	$(cpp_17) $oio_test.cpp && ./a.out
 
 clean:
 	rm Testing/*.cpp

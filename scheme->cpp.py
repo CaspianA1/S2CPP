@@ -1,9 +1,6 @@
 from os.path import abspath, sys
 
 from Front_End.lex_and_parse import parse
-# parse should have the changing for the math functions
-# maybe I deleted it?
-# find it in Carbonite
 
 from Transpile.variadic_input_appendage import append_input_num
 from Transpile.make_function import CFunction
@@ -56,7 +53,7 @@ important files:
 
 another TODO:
 - implement cond
-- make pairs, symbols and lists, car, cdr, and cons
+- make pairs, symbols and lists, car, cdr, and cons - work more on this next
 - proper error reporting
 - formatter
 - eqv function - done
