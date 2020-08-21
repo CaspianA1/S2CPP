@@ -1,5 +1,5 @@
 #include "../Std_Lib/std_lib.hpp"
 int main() {
-f((int)(g(5, 2)), (int)(h(8, 3)));
-return 0;
-}
+	f(g(5, 2), h(8, 3));
+	return 0;
+	}

@@ -2,18 +2,18 @@
 #include <iostream>
 #include <boost/any.hpp>
 
-#define cast(tn) stream << boost::any_cast<tn>(WT.internalVar);\
-				 return stream
+#define cast_var(tn) return boost::any_cast<tn>(internalVar);
+#define cast_stream(tn) stream << boost::any_cast<tn>(WT.internalVar);
 
 // string, boolean, integer, float;
 typedef enum {S, B, I, F} Datatype;
 
 // won't work with arrays
-class Atom {
+class Generic {
 	public:
 		boost::any internalVar;
 		Datatype storedType;
-		Atom (Datatype datatype, std::string varVal) {
+		Generic (Datatype datatype, std::string varVal) {
 			storedType = datatype;
 			switch (datatype) {
 				case S:
@@ -36,23 +36,47 @@ class Atom {
 			}
 		}
 
+		template <typename T>
+		T get() {
+			switch (storedType) {
+				case S: cast_var(std::string);
+				case B: cast_var(bool);
+				case I: cast_var(int);
+				case F: cast_var(float);
+			}
+		}
+
+		// WT, as in WrappedType
+		friend std::ostream& operator<<(std::ostream& stream, const Generic& WT) {
+			switch (WT.storedType) {
+				case S: cast_stream(std::string);
+				case B: cast_stream(bool);
+				case I: cast_stream(int);
+				case F: cast_stream(float);
+			}
+			return stream;
+		}
+
 		// make a getter function that just gets the variable normally
 
-		static Atom make(Datatype datatype, std::string varVal) {
-			Atom newWrapped(datatype, varVal);
+		static Generic make(Datatype datatype, std::string varVal) {
+			Generic newWrapped(datatype, varVal);
 			return newWrapped;
 		}
 };
 
-std::ostream& operator<<(std::ostream& stream, const Atom& WT) {
+/*
+// could make friend function
+std::ostream& operator<<(std::ostream& stream, const Generic& WT) {
 	switch (WT.storedType) {
-		case S: cast(std::string);
-		case B: cast(bool);
-		case I: cast(int);
-		case F: cast(float);
+		case S: cast_stream(std::string);
+		case B: cast_stream(bool);
+		case I: cast_stream(int);
+		case F: cast_stream(float);
 	}
-	std::cerr << "Bad Atom provided to stream operator" << std::endl;
+	return stream;
 }
+*/
 
 /*
 int main() {
@@ -66,5 +90,11 @@ int main() {
 	std::cout << bob << ", " << iLikePancakes << ", " << myAge << ", " << pi << std::endl;k
 
 	return 0;
+}
+*/
+
+/*
+int main() {
+
 }
 */

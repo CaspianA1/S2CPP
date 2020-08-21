@@ -113,7 +113,95 @@ if __name__ == "__main__":
 
 ###################
 
+	"""
+	def quote_lst(lst: list) -> str:
+		for index, item in enumerate(lst):
+			pass
+	"""
+		"""
+		as_str = f"\"{lst}\""
+		for orig, replacement in {"[": "(", "]": ")", ",": ""}.items():
+			as_str = as_str.replace(orig, replacement)
+		return as_str
+		"""
+
+		# print("lst:", to_quote)
+				# scheme_expr[index + 1] = str(to_quote)
+
+				# scheme_expr[index + 1] = quote_lst(to_quote)
+
+				"""
+				print("List:", to_quote)
+
+				# scheme_expr[index + 1] = str(to_quote).replace("[", "{").replace("]", "}")
+				bracket_list = str(to_quote).replace("[", "{").replace("]", "}")
+				ray_format = f
+				template <typename T>
+				vector <T> vect {bracket_list}
+				
+				scheme_expr[index + 1] = ray_format
+				"""
+				# ray_format = "vector <T> vect " + str(to_quote).replace("[", "{").replace("]", "}")
+				# scheme_expr[index + 1] = f"\ntemplate <typename T>\n{ray_format}"
+
 ###################
+"""
+// this is c++ code, but whatever
+
+/*
+// temporary
+void displayStruct(struct Node n) {
+	std::cout << "(";
+
+	// if head == struct node: recursive call to print it
+	// else: 
+
+	try {
+		// cast head to string
+		std::string head_cast = std::any_cast<std::string>(n.head);
+		std::cout << head_cast << ", ";
+	}
+
+	catch (bad_cast) {
+		displayStruct(*n.tail);
+		return;
+	}
+
+
+	displayStruct(*n.tail);
+	std::cout << ")" << std::endl;
+
+	/*
+	try {std::cout << cast(n, int);}
+	catch (bad_cast) {
+		try {std::cout << cast(n, float);}
+		catch (bad_cast) {
+			try {std::cout << cast(n, std::string);}
+				catch (bad_cast) {
+					std::cerr << e.what() << std::endl;
+				}
+			}
+		}
+	std::cout << " ";
+	*/
+
+	/*
+	// assumed that there is no car list
+
+	try {
+		std::cout << std::any_cast<std::string>(n.head) << " "; // use boost::any? or wrapperType?
+	}
+	catch (const std::bad_any_cast& s) {
+		// wrong?
+		std::cout << displayStruct(std::any_cast<struct Node>(n.head)) << " "; // use boost::any? or wrapperType?
+	}
+
+	if (n.tail != nullptr) displayStruct(*n.tail);
+	std::cout << ")";
+	*/
+}
+*/
+"""
 
 ###################
 

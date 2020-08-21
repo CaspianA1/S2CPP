@@ -1,2 +1,2 @@
-all: generic.cpp
-	g++ -std=c++14 generic.cpp
+link:
+	g++ -std=c++17 linked_list_2.cpp && ./a.out

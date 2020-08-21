@@ -17,8 +17,11 @@ def math_double_cast(code, convert_to_doubles = False):
 			# yeah, a toDouble solution is the answer
 
 			# can this toDouble be made into a (double) declaration?
-			caster = "(double)" if convert_to_doubles else "(int)"
-			code[index] = [caster, math_double_cast(arg, False)]
+			# caster = # "(double)" if convert_to_doubles # else int
+			if convert_to_doubles:
+				code[index] = ["(double)", math_double_cast(arg, False)]
+			else:
+				code[index] = math_double_cast(arg, False)
 
 		elif convert_to_doubles:
 			# variable name

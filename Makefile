@@ -43,10 +43,17 @@ mem_equiv:
 	$(move_generated)
 	$(cpp_17) $oequality_test.cpp && ./a.out
 
+# 6. working
 io:
 	$(py) $tio_test.scm
 	$(move_generated)
 	$(cpp_17) $oio_test.cpp && ./a.out
+
+# 7. not working yet
+symbols:
+	$(py) $tsymbols.scm
+	$(move_generated)
+	$(cpp_17) $osymbols.cpp && ./a.out
 
 clean:
 	rm Testing/*.cpp
