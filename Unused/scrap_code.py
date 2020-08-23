@@ -205,6 +205,45 @@ void displayStruct(struct Node n) {
 
 ###################
 
+
+/*
+#define assignInternalType(toAssignTo, wrappedVariable)\
+	try {toAssignTo = getRawType(std::string, wrappedVariable);}\
+		catch (std::bad_variant_access&) {\
+			try {toAssignTo = getRawType(int, wrappedVariable);}\
+			catch (std::bad_variant_access&) {\
+				try {toAssignTo = getRawType(double, wrappedVariable);}\
+				catch (std::bad_variant_access&) {\
+					try {toAssignTo = getRawType(bool, wrappedVariable);}\
+						catch (std::bad_variant_access&) {\
+							try {toAssignTo = getRawType(struct Pair*, wrappedVariable);}\
+							catch {std::bad_variant_access&} {\
+							print("Invalid variable type!");}}}}} // do struct as well
+*/
+
+/*
+#define assignInternalType(toAssignTo, wrappedVariable) try {toAssignTo = getRawType(std::string, wrappedVariable);}\
+														catch (std::bad_variant_access&) {\
+														try {toAssignTo = getRawType(int, wrappedVariable);}\
+														catch (std::bad_variant_access&) {\
+														try {toAssignTo = getRawType(double, wrappedVariable);}\
+														catch (std::bad_variant_access&) {\
+														try {toAssignTo = getRawType(bool, wrappedVariable);}\
+														catch (std::bad_variant_access&) {\
+														print("Invalid variable type!");}}}}
+*/
+
+/*
+#define assignInternalType(toAssignTo, wrappedVariable) if (hasType(std::string, wrappedVariable))\
+														wrappedVariable = getRawType(std::string, wrappedVariable);\
+														else if (hasType(int, wrappedVariable))\
+														wrappedVariable = getRawType(int, wrappedVariable);\
+														else if (hasType(float, wrappedVariable))\
+														wrappedVariable = getRawType(float, wrappedVariable);\
+														else if (hasType(bool, wrappedVariable))\
+														wrappedVariable = getRawType(bool, wrappedVariable);
+*/
+
 ###################
 
 ###################

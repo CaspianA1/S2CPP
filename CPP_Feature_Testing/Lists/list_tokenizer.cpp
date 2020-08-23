@@ -1,18 +1,7 @@
 // list_tokenizer.cpp
 
-#include <string>
-#include <variant>
-#include <vector>
 #include <regex>
-#include <iostream>
-
-#define print(var) std::cout << var << std::endl
-#define varied_type std::variant<std::string, int, double, struct Node*>
-
-struct Node { // node here not needed
-	varied_type head;
-	struct Node* tail;
-};
+// #include "list_declarations.hpp" // this file cannot be used on its own without this
 
 std::string INT_REGEX = "^[-+]?\\d+$",
 			DOUBLE_REGEX = "^[-+]?\\d+\\.\\d?$",
@@ -44,6 +33,7 @@ varied_type changeTokenType(std::string untypedToken) {
 	}
 	else {
 		// print("String or variable");
+		// std::cout << "String or variable: " << untypedToken << std::endl;
 		return untypedToken;
 	}
 }
@@ -59,15 +49,35 @@ bool onlyContains(std::vector<T> buffer, T searchFor) {
 */
 
 // a utility
+
+/*
 void printVariedTypeVector(std::vector<varied_type> variedVector) {
-	#define printWrapped(type) std::cout << std::get<type>(wrappedElem);
+	// #define hasType(type) std::holds_alternative<type>(wrappedElem) // not working for some reason
+	// #define printWrapped(type) std::cout << std::get<type>(wrappedElem)
+	#define wrappedPrintWrapped(type) printWrapped(type, wrappedElem)
 	for (int i = 0; i < variedVector.size(); i++) {
 		varied_type wrappedElem = variedVector[i];
-		try {printWrapped(std::string);}
+
+		///// not working???
+		// this can probably be shortened
+		if (hasType(std::string))
+			printWrapped(std::string);
+		else if (hasType(int))
+			printWrapped(int);
+		else if (hasType(double))
+			printWrapped(double);
+		else if (hasType(bool))
+			printWrapped(bool);
+		else
+			print("All of the casts failed!");
+		///////
+
+		// use the defined macro here (modify it a bit?)
+		try {wrappedPrintWrapped(std::string);}
 		catch (std::bad_variant_access&) {
-			try {printWrapped(int);}
+			try {wrappedPrintWrapped(int);}
 			catch (std::bad_variant_access&) {
-				try {printWrapped(double);}
+				try {wrappedPrintWrapped(double);}
 				catch (std::bad_variant_access&) {
 					print("All of the casts failed!");
 				}
@@ -80,7 +90,42 @@ void printVariedTypeVector(std::vector<varied_type> variedVector) {
 			std::cout << ", ";
 	}
 }
+*/
 
+void printVariedTypeVector(std::vector<varied_type> variedVector) {
+	// size of vector is zero
+	// print("Printing the vector!");
+	// print("Varied vector size: " + std::to_string(variedVector.size()));
+	for (int i = 0; i < variedVector.size(); i++) {
+		// print("Iteration " + std::to_string(i));
+		// std::cout << variedVector[i];
+		varied_type element = variedVector[i];
+		// std::cout << "ELement which: " << element.which() << std::endl;
+		switch (element.which()) {
+			case 0: // std::string
+				std::cout << boost::get<std::string>(element);
+				break;
+			case 1: // int
+				std::cout << boost::get<int>(element);
+				break;
+			case 2: // double
+				std::cout << boost::get<double>(element);;
+				break;
+			case 3: // boolean
+				std::cout << boost::get<bool>(element);
+				break;
+			case 4:
+				std::cout << "Inaccessible struct element";
+				break; // probably will not occur
+		}
+
+		if (i == variedVector.size() - 1)
+			std::cout << std::endl;
+		else
+			std::cout << ", ";
+	}
+
+}
 std::vector<varied_type> tokenize(std::string listData) {
 	std::vector<varied_type> tokenList;
 
@@ -90,10 +135,19 @@ std::vector<varied_type> tokenize(std::string listData) {
 	bool justEncounteredSpace = true;
 
 	#define addToToken(currChar) tokenBuffer.push_back(currChar);
+
+	/*
 	#define castAndSubmitToken()std::string untypedToken(tokenBuffer.begin(), tokenBuffer.end());\
 								tokenBuffer.clear();\
 								auto newToken = changeTokenType(untypedToken);\
 								tokenList.push_back(newToken);
+	*/
+
+	#define castAndSubmitToken()\
+	std::string untypedToken(tokenBuffer.begin(), tokenBuffer.end());\
+	tokenBuffer.clear();\
+	auto newToken = changeTokenType(untypedToken);\
+	tokenList.push_back(newToken);
 
 	for (int i = 0; i < listData.length(); i++) {
 		char currChar = listData[i];
@@ -105,6 +159,7 @@ std::vector<varied_type> tokenize(std::string listData) {
 				addToToken(currChar);
 				castAndSubmitToken();
 				tokenizingString = false;
+				continue;
 			}
 			else { // start tokenizing string
 				// print("Starting string tokenization");
@@ -131,19 +186,22 @@ std::vector<varied_type> tokenize(std::string listData) {
 		}
 		else {
 			// print("Normal token, add it");
-			addToToken(currChar);
+			
 			justEncounteredSpace = false;
+			addToToken(currChar);
+			if (i == listData.length() - 1) {
+				castAndSubmitToken();
+			}
 		}
-
 	}
 	return tokenList;
 }
 
 /*
 int main() {
-	std::string codeSnippet = "      (     2    3.0 t rue true 3. 234532 false bob \" cool  sentence ! \"   )  ";
+	std::string codeSnippet = "      (     2    3.122 t rue true 3.01 234532 false bob \" cool  sentence ! \" b  )";
 	std::vector<varied_type> tokens = tokenize(codeSnippet);
-	printVariedTypeVector(tokens);
+	printVariedTypeVector(tokens); // get the tokenizer to work with boost::variant
 	return 0;
 }
 */

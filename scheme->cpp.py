@@ -109,8 +109,6 @@ def read_from_file(file_name):
 
 def generate_cpp(code: CodeStack, file_name):
 	# c_file_name = sys.argv[1].rstrip("scm") + "cpp"
-
-
 	with open(file_name, "w") as out_file:
 		out_file.write(code.__str__())
 
