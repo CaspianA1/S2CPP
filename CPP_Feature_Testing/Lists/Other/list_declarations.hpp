@@ -9,13 +9,13 @@
 
 struct Pair {
 	boost::variant<std::string, int, double, bool, struct Pair*> head;
-	boost::variant<std::string, int, double, bool, struct Pair*> tail;
+	boost::variant<std::string*, int*, double*, bool*, struct Pair*> tail;
 };
 
 typedef struct Pair Pair;
 
 // remove some of these macros later - it's too messy
-#define varied_type boost::variant<std::string, int, double, bool, Pair>
+#define varied_type boost::variant<std::string, int, double, bool, Pair> // should be pointer?
 #define print(var) std::cout << var << std::endl
 // #define hasType(type, var) std::holds_alternative<type>(var) // fix
 // #define hasType(type, var) typeid(var).name() == typeid(type).name()

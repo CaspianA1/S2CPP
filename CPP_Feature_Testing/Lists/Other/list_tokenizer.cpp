@@ -1,7 +1,7 @@
 // list_tokenizer.cpp
 
 #include <regex>
-// #include "list_declarations.hpp" // this file cannot be used on its own without this
+#include "list_declarations.hpp" // this file cannot be used on its own without this
 
 std::string INT_REGEX = "^[-+]?\\d+$",
 			DOUBLE_REGEX = "^[-+]?\\d+\\.\\d?$",
@@ -11,6 +11,17 @@ bool matchRegex(std::string pattern, std::string inputString) {
 	std::regex expression(pattern);
 	return std::regex_match(inputString, expression);
 }
+
+
+bool stringEquals(varied_type elem, std::string comparison) {
+	try {
+		return boost::get<std::string>(elem) == comparison;
+	}
+	catch (boost::bad_get) {
+		return false;
+	}
+}
+
 
 varied_type changeTokenType(std::string untypedToken) {
 	// print("Untyped token: " + untypedToken);
@@ -109,9 +120,9 @@ void printVariedTypeVector(std::vector<varied_type> variedVector) {
 				std::cout << boost::get<int>(element);
 				break;
 			case 2: // double
-				std::cout << boost::get<double>(element);;
+				std::cout << boost::get<double>(element);
 				break;
-			case 3: // boolean
+			case 3: // bool
 				std::cout << boost::get<bool>(element);
 				break;
 			case 4:
@@ -126,6 +137,42 @@ void printVariedTypeVector(std::vector<varied_type> variedVector) {
 	}
 
 }
+
+/*
+void unspaceParentheses(std::vector<varied_type>& tokens) {
+	for (int i = 0; i < tokens.size(); i++) {
+		varied_type v = tokens[i];
+		std::string origType, asStr;
+		switch (v.which()) {
+			case 0: {
+				asStr = getRawType(std::string, v);
+				if (asStr[0] == '"' && asStr.back() == '"') {
+					print("String literal");
+				}
+				origType = "string";
+				break;
+			}
+			case 1: {
+				asStr = std::to_string(getRawType(int, v));
+				origType = "int";
+				break;
+			}
+			case 2: {
+				asStr = std::to_string(getRawType(double, v));
+				origType = "double";
+				break;
+			}
+			case 3: {
+				asStr = std::to_string(getRawType(bool, v));
+				origType = "bool";
+				break;
+			}
+		}
+		if (asStr[0] == '(') {}
+	}
+}
+*/
+
 std::vector<varied_type> tokenize(std::string listData) {
 	std::vector<varied_type> tokenList;
 
@@ -186,7 +233,6 @@ std::vector<varied_type> tokenize(std::string listData) {
 		}
 		else {
 			// print("Normal token, add it");
-			
 			justEncounteredSpace = false;
 			addToToken(currChar);
 			if (i == listData.length() - 1) {
@@ -194,14 +240,15 @@ std::vector<varied_type> tokenize(std::string listData) {
 			}
 		}
 	}
+	// unspaceParentheses(tokenList);
 	return tokenList;
 }
 
-/*
+
 int main() {
-	std::string codeSnippet = "      (     2    3.122 t rue true 3.01 234532 false bob \" cool  sentence ! \" b  )";
+	// spaces for parens will already be done by python
+	std::string codeSnippet = " ( 2 ( 3.122 ) t rue true 3.01 234532 false bob \" cool  sentence ! \" b  )";
 	std::vector<varied_type> tokens = tokenize(codeSnippet);
 	printVariedTypeVector(tokens); // get the tokenizer to work with boost::variant
 	return 0;
 }
-*/

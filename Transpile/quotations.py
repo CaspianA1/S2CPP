@@ -18,6 +18,7 @@ def unparse(code_l: list, code_s: str = ""):
 
 def unparse(code_l: list):
 	code_s = str(code_l)
+        # consider strings as well
 	for orig, replacement in {"[": " ( ", "]": " ) ",",": ""}.items():
 		code_s = code_s.replace(orig, replacement)
 	return code_s
