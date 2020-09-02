@@ -24,6 +24,8 @@ OPERATOR(gte, >=)
 OPERATOR(lt, <)
 OPERATOR(lte, <=)
 
+// #define eq_cond(a, b) &a == &b
+
 // add support for this
 template <typename A, typename B>
 bool eq_cond(A* a, B* b) {

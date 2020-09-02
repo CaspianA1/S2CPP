@@ -1,5 +1,5 @@
 import sys
-from os.path import abspath
+from os.path import abspath, isfile
 
 from Front_End.lex_and_parse import parse
 
@@ -116,7 +116,7 @@ def main(file_name):
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(mdc(modify_operators(code, make_float_funcs(code))))
 	parsing = lambda expr: hme(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr)))
-	if len(sys.argv) > 1:
+	if isfile(file_name):
 		for expression in read_from_file(file_name):
 			"""
 			parsed_scheme = parse(expression)
@@ -176,12 +176,13 @@ def main(file_name):
 
 		return code_stack
 		# generate_cpp(code_stack)
-
 	else:
-		print("Please specify a filename.")
+		print("Invalid file path.")
 		sys.exit()
 
 if __name__ == "__main__":
-	filename = sys.argv[1]
-	code_stack = main(filename)
-	generate_cpp(code_stack, filename.strip("scm") + "cpp")
+	if len(sys.argv) > 1:
+		code_stack = main(file_name := sys.argv[1])
+		generate_cpp(code_stack, file_name.strip("scm") + "cpp")
+	else:
+		print("Please specify a filename.")
