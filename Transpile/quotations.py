@@ -32,9 +32,10 @@ def handle_quote(scheme_expr):
 			scheme_expr[index] = "identity"
 
 			if isinstance((to_quote := scheme_expr[index + 1]), list):
-				print("Quote this:", to_quote)
+				print("You have just used quote with a list! This feature is very instable at the moment.")
+				# print("Quote this:", to_quote)
 				result = unparse(to_quote)
-				print("Result from unparsed:", result)
+				# print("Result from unparsed:", result)
 				scheme_expr[index + 1] = f"\"{unparse(to_quote)}\""  # ["makeCharVector", f"\"{unparse(to_quote)}\""]
 			else:
 				scheme_expr[index] = str(to_quote)

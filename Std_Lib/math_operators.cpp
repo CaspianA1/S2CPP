@@ -6,7 +6,7 @@
 				template <typename T>\
 				bool func_name(T t1, T t2) {\
 					return t1 operator t2;\
-				}
+				}\
 
 int add(int nargs, ...) {INIT int r = 0; LOOP r += va_arg(args, int); DEINIT}
 double add_d(int nargs, ...) { INIT double r = 0; LOOP r += va_arg(args, double); DEINIT}

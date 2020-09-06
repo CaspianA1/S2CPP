@@ -55,5 +55,11 @@ symbols:
 	$(move_generated)
 	$(cpp_17) $osymbols.cpp && ./a.out
 
+# 8. working
+boolean:
+	$(py) $tboolean.scm
+	$(move_generated)
+	$(cpp_17) $oboolean.cpp && ./a.out
+
 clean:
 	rm Testing/*.cpp

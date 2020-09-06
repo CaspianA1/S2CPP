@@ -10,6 +10,7 @@ from Transpile.quotations import handle_quote
 from Transpile.lambdas import handle_lambda
 from Transpile.math_double_casting import math_double_cast as mdc
 from Transpile.memory_equivalence import handle_mem_equivalence as hme
+from Transpile.bool_name_conversion import convert_bool_names
 from Transpile.conditional import handle_cond
 from Transpile.transform_expression import (make_c_expr, 
 										   make_float_funcs,
@@ -60,10 +61,10 @@ another TODO:
 - formatter - mostly done
 - eqv function - done
 - import scheme files - done
-- that template error with math.scm
+- that template error with math.scm - done
 - float and int problem with operators - done
 - (int) being added to functions functions that are unrelated to math
-- handle boolean values - i.e. "#t" to true, and "#f" to false
+- handle boolean values - i.e. "#t" to true, and "#f" to false - done
 """
 
 class CodeStack:
@@ -115,7 +116,7 @@ def generate_cpp(code: CodeStack, file_name):
 def main(file_name):
 	code_stack = CodeStack()
 	eval_expr = lambda code: make_c_expr(mdc(modify_operators(code, make_float_funcs(code))))
-	parsing = lambda expr: hme(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr)))
+	parsing = lambda expr: convert_bool_names(hme(append_input_num(handle_lambda(handle_quote(parse(expr)), eval_expr))))
 	if isfile(file_name):
 		for expression in read_from_file(file_name):
 			"""

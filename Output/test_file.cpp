@@ -1,8 +1,8 @@
 #include "../Std_Lib/std_lib.hpp"
 #include <file2>
 auto x = 5;
-template <typename N, typename j>
-auto f(N x, j y) {
+template <typename A, typename u>
+auto f(A x, u y) {
 	return add(3, x, y, 1);
 	};
 int main() {

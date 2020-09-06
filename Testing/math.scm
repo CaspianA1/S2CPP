@@ -22,10 +22,15 @@
 (express j (/ 2)); works differently under my transpiler and Chez Scheme
 
 (display top-level)
+(newline)
 (display my-favorite-num)
+(newline)
 (display x)
+(newline)
 (display m)
+(newline)
 (display y)
+(newline)
 (display j)
 
 

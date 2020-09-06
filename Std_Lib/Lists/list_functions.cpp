@@ -5,7 +5,7 @@ NOTE:
 Strings are not supported as of now.
 */
 
-// #pragma GCC diagnostic ignored "-Wreturn-type"
+#include "overloaded_list_operators_3.cpp"
 
 ListValue car(std::variant<std::string, ListValue> expr) {
 	std::string internalExpr;
@@ -266,6 +266,11 @@ int main() {
 
 	double pi = 3.1415926535;
 
+	// double r = pi + head;
+
+	// bool result = pi > head;
+	// print(result);
+
 	// doesn't work:
 	// double result = head + pi;
 
@@ -274,5 +279,5 @@ int main() {
 	+ - * / // % ++ -- += -= != > < >= <= && || 
 	*/
 
-	// Now, integrate this code with the Python side of things
+	// After that, integrate this code with the Python side of things
 }
